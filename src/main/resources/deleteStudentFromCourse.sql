@@ -1,0 +1,1 @@
+delete FROM students_courses where student_id = ? AND course_id = ?;

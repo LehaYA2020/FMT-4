@@ -5,7 +5,7 @@ import DAO.GroupRepository;
 import DAO.Models.Course;
 import DAO.Models.Group;
 import DAO.Models.Student;
-import DAO.StudentsRepository;
+import DAO.StudentRepository;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class DataCreator {
     private Random random = new Random();
     private DataContainer container = new DataContainer();
     private GroupRepository groupDAO = new GroupRepository();
-    private StudentsRepository studentDAO = new StudentsRepository();
+    private StudentRepository studentDAO = new StudentRepository();
     private CourseRepository courseDAO = new CourseRepository();
 
     public DataCreator() throws DAOException {
