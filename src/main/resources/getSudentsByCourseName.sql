@@ -1,0 +1,1 @@
+SELECT students.id, students.first_name, students.last_name, students_groups.group_id FROM students INNER JOIN students_courses ON students.id = students_courses.student_id LEFT JOIN students_groups ON students_groups.student_id = students.id INNER JOIN courses ON courses.id = students_courses.course_id WHERE courses.name = ?;
