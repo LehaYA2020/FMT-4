@@ -5,8 +5,13 @@ import dao.Exceptions.MessagesConstants;
 import models.Course;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static java.nio.file.Files.lines;
@@ -27,14 +32,20 @@ public class FileReader {
         return instance;
     }
 
-    public DBAccess getAccess(String fileName) throws DAOException {
+    public DBAccess getAccess(String fileName) throws DAOException{
+        Properties properties = new Properties();
         isNull(fileName);
         file = getFileFromResources(fileName);
         checkFile();
+        try(InputStream in = Files.newInputStream(get(file.getAbsolutePath()))){
+            properties.load(in);
+        } catch (IOException ioException){
+            throw new DAOException(ioException.getMessage(), ioException);
+        }
         List<String> data = getData();
         if (data.size() == 3) {
-            return new DBAccess(data.get(0), data.get(1), data.get(2));
-        } else return new DBAccess(data.get(0), data.get(1), "");
+            return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
+        } else return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), "");
     }
 
     public String getQuery(String fileName) throws DAOException {

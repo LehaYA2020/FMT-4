@@ -10,8 +10,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StudentRepoTest {
-    private static List<Student> students = new ArrayList<>();
-    private static List<Course> courses = new ArrayList<>();
+    private static List<Student> students;
+    private static List<Course> courses;
     private StudentRepository studentRepository = new StudentRepository();
     private CourseRepository courseRepository = new CourseRepository();
     private static DBConnection dbConnection;
@@ -25,6 +25,8 @@ public class StudentRepoTest {
 
     @BeforeEach
     public void createTables() throws DAOException {
+        students = new ArrayList<>();
+        courses = new ArrayList<>();
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         scriptExecutor.executeScript("CreateTables.sql");
         for (int i = 1; i <= 3; i++){

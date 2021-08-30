@@ -2,6 +2,7 @@ package dao;
 
 import dao.Exceptions.DAOException;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,7 +22,7 @@ public class DBConnection {
         return instance;
     }
 
-    public static synchronized DBConnection getInstance(String properties) throws DAOException {
+    public static synchronized DBConnection getInstance(String properties) throws DAOException{
         if(instance == null) {
             FileReader fileReader = FileReader.getInstance();
             DBAccess access = fileReader.getAccess(properties);
