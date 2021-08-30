@@ -1,9 +1,9 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
-import DAO.Exceptions.MessagesConstants;
-import DAO.Models.Course;
-import DAO.Models.Student;
+import dao.Exceptions.DAOException;
+import dao.Exceptions.MessagesConstants;
+import models.Course;
+import models.Student;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ public class StudentRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
 
-    public StudentRepository() throws DAOException {
+    public StudentRepository() {
     }
 
     public void insertStudent(List<Student> students) throws DAOException {
         String Query = fileReader.getQuery("insertStudent.sql");
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS)){
-            for (Student s : students){
+             PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS)) {
+            for (Student s : students) {
                 preparedStatement.setString(1, s.getFirstName());
                 preparedStatement.setString(2, s.getLastName());
                 preparedStatement.addBatch();
@@ -73,23 +73,23 @@ public class StudentRepository {
     public Student getStudentById(int id) throws DAOException {
         String Query = fileReader.getQuery("getStudentById.sql");
         List<Student> students;
-        try(Connection connection = dbConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Query)){
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 students = processStudentsSet(resultSet);
             }
-        }catch (SQLException e) {
-            throw new DAOException(MessagesConstants.CANNOT_GET_STUDENT_BY_ID , e);
+        } catch (SQLException e) {
+            throw new DAOException(MessagesConstants.CANNOT_GET_STUDENT_BY_ID, e);
         }
         return students.get(0);
     }
 
     public void deleteStudent(Student student) throws DAOException {
         String Query = fileReader.getQuery("deleteStudentById.sql");
-        try(Connection connection = dbConnection.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(Query)){
-            preparedStatement.setInt(1,student.getId());
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
+            preparedStatement.setInt(1, student.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_DELETE_STUDENT, e);
@@ -99,12 +99,12 @@ public class StudentRepository {
     public List<Student> getStudentsByCourseName(String courseName) throws DAOException {
         String Query = fileReader.getQuery("getStudentsByCourseName.sql");
         List<Student> students;
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)){
+        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setString(1, courseName);
-            try (ResultSet resultSet = preparedStatement.executeQuery()){
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 students = processStudentsSet(resultSet);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_GET_STUDENTS_BY_COURSE, e);
         }
         return students;
@@ -130,9 +130,9 @@ public class StudentRepository {
     public List<Course> getStudentAssignments(Student student) throws DAOException {
         String Query = fileReader.getQuery("getStudentAssignments.sql");
         List<Course> courses;
-        try(Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)){
+        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, student.getId());
-            try (ResultSet resultSet = preparedStatement.executeQuery()){
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 courses = processAssignmentsSet(resultSet);
             }
         } catch (SQLException e) {
@@ -144,11 +144,11 @@ public class StudentRepository {
     public void assignToCourses(Map<Student, Set<Course>> assignStudents) throws DAOException {
         String Query = fileReader.getQuery("assignToCourse.sql");
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
-            for (Map.Entry<Student, Set<Course>> entry: assignStudents.entrySet()){
+            for (Map.Entry<Student, Set<Course>> entry : assignStudents.entrySet()) {
                 Student student = entry.getKey();
                 List<Course> courses = this.getStudentAssignments(student);
-                for (Course course : entry.getValue()){
-                    if(!courses.contains(course)){
+                for (Course course : entry.getValue()) {
+                    if (!courses.contains(course)) {
                         preparedStatement.setInt(1, student.getId());
                         preparedStatement.setInt(2, course.getId());
                         preparedStatement.addBatch();
@@ -156,14 +156,14 @@ public class StudentRepository {
                 }
             }
             preparedStatement.executeBatch();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_ASSIGN_TO_COURSES, e);
         }
     }
 
     public void deleteStudentFromCourse(Student student, Course course) throws DAOException {
         String Query = fileReader.getQuery("deleteStudentFromCourse.sql");
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)){
+        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, student.getId());
             preparedStatement.setInt(2, course.getId());
             preparedStatement.executeUpdate();
@@ -190,11 +190,11 @@ public class StudentRepository {
     private List<Course> processAssignmentsSet(ResultSet resultSet) throws DAOException {
         List<Course> courses = new ArrayList<>();
         try {
-            while (resultSet.next()){
-                Integer courseID = resultSet.getInt("course_id");
+            while (resultSet.next()) {
+                int courseID = resultSet.getInt("course_id");
                 courses.add(new CourseRepository().getCourseById(courseID));
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_PROCESS_ASSIGNMENTS_SET, e);
         }
         return courses;

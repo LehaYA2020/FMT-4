@@ -1,8 +1,8 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
-import DAO.Exceptions.MessagesConstants;
-import DAO.Models.Course;
+import dao.Exceptions.DAOException;
+import dao.Exceptions.MessagesConstants;
+import models.Course;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class CourseRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
 
-    public CourseRepository() throws DAOException {
+    public CourseRepository() {
     }
 
     public List<Course> getAllCourses() throws DAOException {

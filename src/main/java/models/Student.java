@@ -1,11 +1,11 @@
-package DAO.Models;
+package models;
 
 import java.util.Objects;
 
 public class Student {
     private int id;
-    private String firstName;
-    private String lastName;
+    private final String firstName;
+    private final String lastName;
     private int groupId;
 
     public Student(int id, String firstName, String lastName) {

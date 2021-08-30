@@ -1,5 +1,5 @@
-import DAO.*;
-import DAO.Exceptions.DAOException;
+import dao.*;
+import dao.Exceptions.DAOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

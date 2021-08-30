@@ -1,4 +1,4 @@
-package DAO.Exceptions;
+package dao.Exceptions;
 
 public class MessagesConstants {
     public static final String FILE_NOT_FOUND_MESSAGE = "File is not found: ";

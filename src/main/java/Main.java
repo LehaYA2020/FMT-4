@@ -1,6 +1,6 @@
-import DAO.Exceptions.DAOException;
-import DAO.ScriptExecutor;
-import DAO.StudentRepository;
+import dao.Exceptions.DAOException;
+import dao.ScriptExecutor;
+import dao.StudentRepository;
 
 public class Main {
     public static void main(String[] args) throws DAOException {

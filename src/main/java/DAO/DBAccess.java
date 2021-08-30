@@ -1,6 +1,5 @@
-package DAO;
+package dao;
 
-import java.util.Objects;
 
 public class DBAccess {
     private final String url;
@@ -28,17 +27,10 @@ public class DBAccess {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DBAccess)) return false;
-
-        DBAccess that = (DBAccess) o;
+        if (!(o instanceof DBAccess that)) return false;
 
         if (!url.equals(that.url)) return false;
         if (!user.equals(that.user)) return false;
         return password.equals(that.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(url, user, password);
     }
 }

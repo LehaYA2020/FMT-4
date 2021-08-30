@@ -1,8 +1,8 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
-import DAO.Exceptions.MessagesConstants;
-import DAO.Models.Course;
+import dao.Exceptions.DAOException;
+import dao.Exceptions.MessagesConstants;
+import models.Course;
 
 import java.io.File;
 import java.net.URL;

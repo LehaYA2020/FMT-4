@@ -1,8 +1,8 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
-import DAO.Exceptions.MessagesConstants;
-import DAO.Models.Group;
+import dao.Exceptions.DAOException;
+import dao.Exceptions.MessagesConstants;
+import models.Group;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +12,9 @@ public class GroupRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
 
-    public GroupRepository() throws DAOException {
+    public GroupRepository() {
     }
+
     public void insertGroup(List<Group> groups) throws DAOException {
         String script = fileReader.getQuery("insertGroup.sql");
 
@@ -56,7 +57,7 @@ public class GroupRepository {
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(script)) {
-             preparedStatement.setInt(1,counter);
+            preparedStatement.setInt(1, counter);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 groups = processGroupSet(resultSet);
             }

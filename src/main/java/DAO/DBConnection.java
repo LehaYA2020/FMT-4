@@ -1,6 +1,6 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
+import dao.Exceptions.DAOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,8 +8,8 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static DBConnection instance;
-    private DBAccess access;
-    DBConnection(DBAccess access){
+    private final DBAccess access;
+    public DBConnection(DBAccess access){
         this.access = access;
     }
     public static synchronized DBConnection getInstance() throws DAOException {

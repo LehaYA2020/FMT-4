@@ -1,8 +1,7 @@
-import DAO.Models.Course;
-import DAO.Models.Group;
-import DAO.Models.Student;
+import models.Course;
+import models.Group;
+import models.Student;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

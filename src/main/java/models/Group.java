@@ -1,60 +1,50 @@
-package DAO.Models;
+package models;
 
 import java.util.Objects;
 
-public class Course {
+public class Group {
     private int id;
-    private String name;
-    private String description;
+    private final String name;
 
-    public Course(String name, String description){
+    public Group (String name) {
         this.name = name;
-        this.description = description;
     }
 
-    public Course (int id, String name, String description) {
+    public Group (int id, String name) {
         this.id = id;
         this.name = name;
-        this.description = description;
-    }
-
-
-    public int getId() {
-        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id;
+        Group group = (Group) o;
+        return id == group.id && Objects.equals(name, group.name);
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 '}';
     }
 }

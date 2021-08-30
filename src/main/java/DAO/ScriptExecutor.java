@@ -1,7 +1,7 @@
-package DAO;
+package dao;
 
-import DAO.Exceptions.DAOException;
-import DAO.Exceptions.MessagesConstants;
+import dao.Exceptions.DAOException;
+import dao.Exceptions.MessagesConstants;
 
 import java.sql.Connection;
 import java.sql.SQLException;

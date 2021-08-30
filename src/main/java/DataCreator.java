@@ -1,21 +1,21 @@
-import DAO.CourseRepository;
-import DAO.Exceptions.DAOException;
-import DAO.FileReader;
-import DAO.GroupRepository;
-import DAO.Models.Course;
-import DAO.Models.Group;
-import DAO.Models.Student;
-import DAO.StudentRepository;
+import dao.CourseRepository;
+import dao.Exceptions.DAOException;
+import dao.FileReader;
+import dao.GroupRepository;
+import models.Course;
+import models.Group;
+import models.Student;
+import dao.StudentRepository;
 
 import java.util.*;
 
 public class DataCreator {
-    private FileReader dataReader = FileReader.getInstance();
-    private Random random = new Random();
-    private DataContainer container = new DataContainer();
-    private GroupRepository groupDAO = new GroupRepository();
-    private StudentRepository studentDAO = new StudentRepository();
-    private CourseRepository courseDAO = new CourseRepository();
+    private final FileReader dataReader = FileReader.getInstance();
+    private final Random random = new Random();
+    private final DataContainer container = new DataContainer();
+    private final GroupRepository groupDAO = new GroupRepository();
+    private final StudentRepository studentDAO = new StudentRepository();
+    private final CourseRepository courseDAO = new CourseRepository();
 
     public DataCreator() throws DAOException {
     }
@@ -48,13 +48,12 @@ public class DataCreator {
     }
 
     private String createGroupName(){
-        StringBuilder name = new StringBuilder();
-        name.append((char) (random.nextInt(26)+97));
-        name.append((char) (random.nextInt(26)+97));
-        name.append('-');
-        name.append(random.nextInt(10));
-        name.append(random.nextInt(10));
-        return name.toString();
+        String name = String.valueOf((char) (random.nextInt(26) + 97)) +
+                (char) (random.nextInt(26) + 97) +
+                '-' +
+                random.nextInt(10) +
+                random.nextInt(10);
+        return name;
     }
 
     private Map<Student, Set<Course>> createStudents() throws DAOException {

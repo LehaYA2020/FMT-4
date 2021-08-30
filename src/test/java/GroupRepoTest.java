@@ -1,8 +1,7 @@
-import DAO.*;
-import DAO.Exceptions.DAOException;
-import DAO.Models.Course;
-import DAO.Models.Group;
-import DAO.Models.Student;
+import dao.*;
+import dao.Exceptions.DAOException;
+import models.Group;
+import models.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

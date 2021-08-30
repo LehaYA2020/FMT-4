@@ -1,7 +1,7 @@
-import DAO.CourseRepository;
-import DAO.*;
-import DAO.Exceptions.DAOException;
-import DAO.Models.Course;
+import dao.CourseRepository;
+import dao.*;
+import dao.Exceptions.DAOException;
+import models.Course;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,6 @@ public class CourseRepoTest {
     private CourseRepository courseRepository = new CourseRepository();
     private static List<Course> testCourseList = new ArrayList<>();
     private static DBConnection dbConnection;
-
-    public CourseRepoTest() throws DAOException {
-    }
 
     @BeforeEach
     public void createTables() throws DAOException {
@@ -41,7 +38,7 @@ public class CourseRepoTest {
     }
 
     @Test
-    public void shouldGetAllCoursesFromDB() throws DAOException {;
+    public void shouldGetAllCoursesFromDB() throws DAOException {
         courseRepository.insertCourses(testCourseList);
         List<Course> actualCourses = courseRepository.getAllCourses();
         assertEquals(testCourseList, actualCourses);
