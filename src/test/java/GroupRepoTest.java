@@ -18,8 +18,6 @@ public class GroupRepoTest {
     private static List<Group> testGroupsList = new ArrayList<>();
     private static List<Student> testStudentList = new ArrayList<>();
 
-    public GroupRepoTest() throws DAOException {
-    }
     @BeforeAll
     public static void prepare() throws DAOException {
         dbConnection = dbConnection.getInstance("TestDatabaseH2.properties");
