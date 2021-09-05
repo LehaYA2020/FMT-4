@@ -11,12 +11,13 @@ import java.util.List;
 public class CourseRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
+    private final QueriesConstants queriesConstants = new QueriesConstants();
 
     public CourseRepository() {
     }
 
     public List<Course> getAllCourses() throws DAOException {
-        String Query = fileReader.getQuery("getAllCourses.sql");
+        String Query = queriesConstants.GET_ALL_COURSES;
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query);
@@ -29,7 +30,7 @@ public class CourseRepository {
     }
 
     public Course getCourseById(int id) throws DAOException {
-        String Query = fileReader.getQuery("getCourseById.sql");
+        String Query = queriesConstants.GET_COURSE_BY_ID;
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
@@ -43,8 +44,8 @@ public class CourseRepository {
         return courses.get(0);
     }
 
-    public void insertCourses(List<Course> courses) throws DAOException {
-        String Query = fileReader.getQuery("insertCourses.sql");
+    public List<Course> insertCourses(List<Course> courses) throws DAOException {
+        String Query = queriesConstants.INSERT_COURSE;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS)) {
             for (Course c : courses) {
@@ -63,7 +64,7 @@ public class CourseRepository {
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_INSERT_COURSES, e);
         }
-
+        return courses;
     }
 
     private List<Course> processCoursesSet(ResultSet resultSet) throws DAOException {

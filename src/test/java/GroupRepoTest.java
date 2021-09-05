@@ -1,5 +1,7 @@
-import dao.*;
 import dao.Exceptions.DAOException;
+import dao.GroupRepository;
+import dao.ScriptExecutor;
+import dao.StudentRepository;
 import models.Group;
 import models.Student;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,31 +11,29 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GroupRepoTest {
-    private static DBConnection dbConnection;
-    private GroupRepository groupRepository= new GroupRepository();
-    private StudentRepository studentRepository = new StudentRepository();
-    private static List<Group> testGroupsList = new ArrayList<>();
-    private static List<Student> testStudentList = new ArrayList<>();
+    private final GroupRepository groupRepository = new GroupRepository();
+    private final StudentRepository studentRepository = new StudentRepository();
+    private static final List<Group> testGroupsList = new ArrayList<>();
+    private static final List<Student> testStudentList = new ArrayList<>();
 
     @BeforeAll
-    public static void prepare() throws DAOException {
-        dbConnection = dbConnection.getInstance("TestDatabaseH2.properties");
+    public static void prepare() {
+        for (int i = 1; i <= 3; i++) {
+            testGroupsList.add(new Group("te-st" + i));
+        }
+        for (int i = 1; i <= 10; i++) {
+            testStudentList.add(new Student(i, "Student-" + i, "forTest"));
+        }
+        insertStudentsToGroups();
     }
 
     @BeforeEach
     public void createTables() throws DAOException {
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         scriptExecutor.executeScript("CreateTables.sql");
-        for (int i = 1; i <= 3; i++){
-            testGroupsList.add(new Group("te-st" + i));
-        }
-        for (int i = 1; i <= 10; i++){
-            testStudentList.add(new Student(i, "Student-" + i,"forTest"));
-        }
-        insertStudentsToGroups();
     }
 
     @Test
@@ -65,14 +65,14 @@ public class GroupRepoTest {
         assertEquals(expectedGroups, actualGroups);
     }
 
-    private void insertStudentsToGroups(){
-        for (int i = 0; i<2;i++){
+    private static void insertStudentsToGroups() {
+        for (int i = 0; i < 2; i++) {
             testStudentList.get(i).setGroupId(testGroupsList.get(0).getId());
         }
-        for (int i = 2; i<5;i++){
+        for (int i = 2; i < 5; i++) {
             testStudentList.get(i).setGroupId(testGroupsList.get(1).getId());
         }
-        for (int i = 5; i<9;i++){
+        for (int i = 5; i < 9; i++) {
             testStudentList.get(i).setGroupId(testGroupsList.get(2).getId());
         }
     }

@@ -4,7 +4,6 @@ import dao.Exceptions.DAOException;
 import dao.Exceptions.MessagesConstants;
 import models.Group;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +11,11 @@ import java.util.List;
 public class GroupRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
+    private final QueriesConstants queriesConstants = new QueriesConstants();
 
 
-    public void insertGroup(List<Group> groups) throws DAOException {
-        String script = fileReader.getQuery("insertGroup.sql");
+    public List<Group> insertGroup(List<Group> groups) throws DAOException {
+        String script = queriesConstants.INSERT_GROUP;
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement =
@@ -35,10 +35,11 @@ public class GroupRepository {
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_INSERT_GROUPS, e);
         }
+        return groups;
     }
 
     public List<Group> getAllGroups() throws DAOException {
-        String script = fileReader.getQuery("getAllGroups.sql");
+        String script = queriesConstants.GET_ALL_GROUPS;
         List<Group> groups;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(script);
@@ -51,7 +52,7 @@ public class GroupRepository {
     }
 
     public List<Group> getGroupsByCounter(int counter) throws DAOException {
-        String script = fileReader.getQuery("getGroupsByCounter.sql");
+        String script = queriesConstants.GET_GROUPS_BY_COUNTER;
         List<Group> groups;
 
         try (Connection connection = dbConnection.getConnection();

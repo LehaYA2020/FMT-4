@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
@@ -32,14 +31,14 @@ public class FileReader {
         return instance;
     }
 
-    public DBAccess getAccess(String fileName) throws DAOException{
+    public DBAccess getAccess(String fileName) throws DAOException {
         Properties properties = new Properties();
         isNull(fileName);
         file = getFileFromResources(fileName);
         checkFile();
-        try(InputStream in = Files.newInputStream(get(file.getAbsolutePath()))){
+        try (InputStream in = Files.newInputStream(get(file.getAbsolutePath()))) {
             properties.load(in);
-        } catch (IOException ioException){
+        } catch (IOException ioException) {
             throw new DAOException(ioException.getMessage(), ioException);
         }
         List<String> data = getData();

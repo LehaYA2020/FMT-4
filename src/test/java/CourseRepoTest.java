@@ -1,33 +1,26 @@
 import dao.CourseRepository;
-import dao.*;
 import dao.Exceptions.DAOException;
+import dao.ScriptExecutor;
 import models.Course;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class CourseRepoTest {
-    private CourseRepository courseRepository = new CourseRepository();
-    private static List<Course> testCourseList = new ArrayList<>();
-    private static DBConnection dbConnection;
+    private final CourseRepository courseRepository = new CourseRepository();
+    private static final List<Course> testCourseList = new ArrayList<>();
 
     @BeforeEach
     public void createTables() throws DAOException {
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         scriptExecutor.executeScript("CreateTables.sql");
-        for (int i = 1; i <= 3; i++){
+        for (int i = 1; i <= 3; i++) {
             testCourseList.add(new Course("Course-" + i, "forTest"));
         }
-    }
-
-    @BeforeAll
-    public static void prepare() throws DAOException {
-        dbConnection = dbConnection.getInstance("TestDatabaseH2.properties");
     }
 
     @Test

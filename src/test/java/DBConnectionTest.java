@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DBConnectionTest {
     @Test
@@ -19,7 +20,7 @@ public class DBConnectionTest {
 
     @Test
     void getTestConnection() throws DAOException, SQLException {
-        DBConnection daoFactory = DBConnection.getInstance("TestDatabaseH2.properties");
+        DBConnection daoFactory = DBConnection.getInstance("database.properties");
         try (Connection connection = daoFactory.getConnection()) {
             assertTrue(connection.isValid(1));
             assertFalse(connection.isClosed());

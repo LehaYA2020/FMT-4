@@ -1,5 +1,6 @@
-import dao.*;
+import dao.DBConnection;
 import dao.Exceptions.DAOException;
+import dao.ScriptExecutor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -7,16 +8,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScriptExecutorTest {
     private static DBConnection dbConnection;
-    private ScriptExecutor scriptExecutor = new ScriptExecutor();
-    private final String EXCEPTION_MESSAGE = "Cannot check table for existence.";
+    private final ScriptExecutor scriptExecutor = new ScriptExecutor();
 
     @BeforeAll
     public static void prepare() throws DAOException {
-        dbConnection = dbConnection.getInstance("TestDatabaseH2.properties");
+        dbConnection = DBConnection.getInstance("TestDatabaseH2.properties");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ScriptExecutorTest {
                 return true;
             }
         } catch (SQLException e) {
-            throw new DAOException(EXCEPTION_MESSAGE, e);
+            throw new DAOException("Cannot check table for existence.", e);
         }
         return false;
     }

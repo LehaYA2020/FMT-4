@@ -1,9 +1,11 @@
-import dao.*;
+import dao.CourseRepository;
 import dao.Exceptions.DAOException;
+import dao.GroupRepository;
+import dao.ScriptExecutor;
+import dao.StudentRepository;
 import models.Course;
 import models.Group;
 import models.Student;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,19 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DataCreatorTest {
     private final DataCreator dataCreator = new DataCreator();
-    private static DBConnection dbConnection;
     private final StudentRepository studentRepository = new StudentRepository();
     private final CourseRepository courseRepository = new CourseRepository();
     private final GroupRepository groupRepository = new GroupRepository();
     private DataContainer dataContainer;
-
-    public DataCreatorTest() throws DAOException {
-    }
-
-    @BeforeAll
-    public static void prepare() throws DAOException {
-        dbConnection = DBConnection.getInstance("TestDatabaseH2.properties");
-    }
 
     @BeforeEach
     public void createTables() throws DAOException {
@@ -38,9 +31,9 @@ public class DataCreatorTest {
 
     @Test
     public void createTestData_shouldCreateDataAndPutItToDB() throws DAOException {
-        List<Student> students = studentRepository.getAllStudents();
-        List<Course> courses = courseRepository.getAllCourses();
-        List<Group> groups = groupRepository.getAllGroups();
+        List<Student> students;
+        List<Course> courses;
+        List<Group> groups;
 
         dataContainer = dataCreator.createTestData();
 

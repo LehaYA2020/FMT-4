@@ -14,12 +14,13 @@ import java.util.Set;
 public class StudentRepository {
     private final DBConnection dbConnection = DBConnection.getInstance();
     private final FileReader fileReader = FileReader.getInstance();
+    private final QueriesConstants queriesConstants = new QueriesConstants();
 
     public StudentRepository() {
     }
 
-    public void insertStudent(List<Student> students) throws DAOException {
-        String Query = fileReader.getQuery("insertStudent.sql");
+    public List<Student> insertStudent(List<Student> students) throws DAOException {
+        String Query = queriesConstants.INSERT_STUDENT;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS)) {
             for (Student s : students) {
@@ -39,27 +40,11 @@ public class StudentRepository {
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_GET_STUDENT_BY_ID, e);
         }
-    }
-
-    private void insertStudentToGroup(List<Student> students) throws DAOException {
-        String query = fileReader.getQuery("insertStudentToGroup.sql");
-        try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            for (Student student : students) {
-                if (student.getGroupId() > 0) {
-                    preparedStatement.setInt(1, student.getId());
-                    preparedStatement.setInt(2, student.getGroupId());
-                    preparedStatement.addBatch();
-                }
-            }
-            preparedStatement.executeBatch();
-        } catch (SQLException e) {
-            throw new DAOException(MessagesConstants.CANNOT_INSERT_STUDENTS_LIST, e);
-        }
+        return students;
     }
 
     public List<Student> getAllStudents() throws DAOException {
-        String Query = fileReader.getQuery("getAllStudents.sql");
+        String Query = queriesConstants.GET_ALL_STUDENTS;
         List<Student> students;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query); ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -71,7 +56,7 @@ public class StudentRepository {
     }
 
     public Student getStudentById(int id) throws DAOException {
-        String Query = fileReader.getQuery("getStudentById.sql");
+        String Query = queriesConstants.GET_STUDENT_BY_ID;
         List<Student> students;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
@@ -86,7 +71,7 @@ public class StudentRepository {
     }
 
     public void deleteStudent(Student student) throws DAOException {
-        String Query = fileReader.getQuery("deleteStudentById.sql");
+        String Query = queriesConstants.DELETE_STUDENT;
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, student.getId());
@@ -97,7 +82,7 @@ public class StudentRepository {
     }
 
     public List<Student> getStudentsByCourseName(String courseName) throws DAOException {
-        String Query = fileReader.getQuery("getStudentsByCourseName.sql");
+        String Query = queriesConstants.GET_STUDENTS_BY_COURSE_NAME;
         List<Student> students;
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setString(1, courseName);
@@ -111,7 +96,7 @@ public class StudentRepository {
     }
 
     public boolean assignToCourse(Student student, Course course) throws DAOException {
-        String Query = fileReader.getQuery("assignToCourse.sql");
+        String Query = queriesConstants.ASSIGN_TO_COURSE;
         boolean flag = false;
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             List<Course> courses = this.getStudentAssignments(student);
@@ -128,7 +113,7 @@ public class StudentRepository {
     }
 
     public List<Course> getStudentAssignments(Student student) throws DAOException {
-        String Query = fileReader.getQuery("getStudentAssignments.sql");
+        String Query = queriesConstants.GET_STUDENT_ASSIGNMENTS;
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, student.getId());
@@ -141,8 +126,8 @@ public class StudentRepository {
         return courses;
     }
 
-    public void assignToCourses(Map<Student, Set<Course>> assignStudents) throws DAOException {
-        String Query = fileReader.getQuery("assignToCourse.sql");
+    public Map<Student, Set<Course>> assignToCourses(Map<Student, Set<Course>> assignStudents) throws DAOException {
+        String Query = queriesConstants.ASSIGN_TO_COURSE;
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             for (Map.Entry<Student, Set<Course>> entry : assignStudents.entrySet()) {
                 Student student = entry.getKey();
@@ -159,16 +144,34 @@ public class StudentRepository {
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_ASSIGN_TO_COURSES, e);
         }
+        return assignStudents;
     }
 
     public void deleteStudentFromCourse(Student student, Course course) throws DAOException {
-        String Query = fileReader.getQuery("deleteStudentFromCourse.sql");
+        String Query = queriesConstants.DELETE_STUDENT_FROM_COURSE;
         try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
             preparedStatement.setInt(1, student.getId());
             preparedStatement.setInt(2, course.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_DELETE_FROM_COURSE, e);
+        }
+    }
+
+    private void insertStudentToGroup(List<Student> students) throws DAOException {
+        String query = fileReader.getQuery("insertStudentToGroup.sql");
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            for (Student student : students) {
+                if (student.getGroupId() > 0) {
+                    preparedStatement.setInt(1, student.getId());
+                    preparedStatement.setInt(2, student.getGroupId());
+                    preparedStatement.addBatch();
+                }
+            }
+            preparedStatement.executeBatch();
+        } catch (SQLException e) {
+            throw new DAOException(MessagesConstants.CANNOT_INSERT_STUDENTS_LIST, e);
         }
     }
 

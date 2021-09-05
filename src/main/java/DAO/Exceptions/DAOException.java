@@ -1,6 +1,6 @@
 package dao.Exceptions;
 
-public class DAOException extends RuntimeException{
+public class DAOException extends RuntimeException {
     public DAOException() {
         super();
     }
@@ -9,7 +9,7 @@ public class DAOException extends RuntimeException{
         super(message, cause);
     }
 
-    public  DAOException(String message) {
+    public DAOException(String message) {
         super(message);
     }
 }

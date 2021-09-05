@@ -1,38 +1,36 @@
+import dao.CourseRepository;
 import dao.Exceptions.DAOException;
-import models.*;
-import dao.*;
+import dao.ScriptExecutor;
+import dao.StudentRepository;
+import models.Course;
+import models.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StudentRepoTest {
-    private static List<Student> students;
-    private static List<Course> courses;
-    private StudentRepository studentRepository = new StudentRepository();
-    private CourseRepository courseRepository = new CourseRepository();
-    private static DBConnection dbConnection;
+    private static final List<Student> students = new ArrayList<>();
+    private static final List<Course> courses = new ArrayList<>();
+    private final StudentRepository studentRepository = new StudentRepository();
+    private final CourseRepository courseRepository = new CourseRepository();
 
-    public StudentRepoTest() throws DAOException {
-    }
     @BeforeAll
     public static void prepare() throws DAOException {
-        dbConnection = dbConnection.getInstance("TestDatabaseH2.properties");
+        for (int i = 1; i <= 3; i++) {
+            students.add(new Student(i, "Student-" + i, "forTest"));
+            courses.add(new Course("Course-" + i, "forTest"));
+        }
     }
 
     @BeforeEach
     public void createTables() throws DAOException {
-        students = new ArrayList<>();
-        courses = new ArrayList<>();
+
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         scriptExecutor.executeScript("CreateTables.sql");
-        for (int i = 1; i <= 3; i++){
-            students.add(new Student(i, "Student-" + i,"forTest"));
-            courses.add(new Course("Course-" + i, "forTest"));
-        }
     }
 
     @Test
@@ -67,7 +65,7 @@ public class StudentRepoTest {
         studentRepository.assignToCourse(students.get(0), courses.get(1));
         List<Course> expectedAssignments = new ArrayList<>();
         expectedAssignments.add(courses.get(1));
-        assertEquals(studentRepository.getStudentAssignments(studentRepository.getStudentById(1)),expectedAssignments);
+        assertEquals(studentRepository.getStudentAssignments(studentRepository.getStudentById(1)), expectedAssignments);
     }
 
     @Test
@@ -76,12 +74,12 @@ public class StudentRepoTest {
         courseRepository.insertCourses(courses);
         Map<Student, Set<Course>> assignMap = new HashMap<>();
         Set<Course> courseSet = new HashSet<>(courses);
-        assignMap.put(students.get(0),courseSet);
+        assignMap.put(students.get(0), courseSet);
         assignMap.put(students.get(1), new HashSet<>(Collections.singleton(courses.get(1))));
 
         studentRepository.assignToCourses(assignMap);
 
-        for (Student student : students){
+        for (Student student : students) {
             List<Course> actual = studentRepository.getStudentAssignments(student);
             List<Course> expected;
             if (assignMap.containsKey(student)) {
@@ -99,12 +97,12 @@ public class StudentRepoTest {
         courseRepository.insertCourses(courses);
         Map<Student, Set<Course>> assignMap = new HashMap<>();
         Set<Course> courseSet = new HashSet<>(courses);
-        assignMap.put(students.get(0),courseSet);
-        assignMap.put(students.get(1),new HashSet<>(Collections.singleton(courses.get(0))));
+        assignMap.put(students.get(0), courseSet);
+        assignMap.put(students.get(1), new HashSet<>(Collections.singleton(courses.get(0))));
         studentRepository.assignToCourses(assignMap);
 
         List<Student> actualStudents = studentRepository.getStudentsByCourseName(courses.get(1).getName());
-        List<Student> expectedStudents = students.subList(0,1);
+        List<Student> expectedStudents = students.subList(0, 1);
 
         assertEquals(expectedStudents, actualStudents);
     }
@@ -115,8 +113,8 @@ public class StudentRepoTest {
         courseRepository.insertCourses(courses);
         Map<Student, Set<Course>> assignMap = new HashMap<>();
         Set<Course> courseSet = new HashSet<>(courses);
-        assignMap.put(students.get(0),courseSet);
-        assignMap.put(students.get(1),courseSet);
+        assignMap.put(students.get(0), courseSet);
+        assignMap.put(students.get(1), courseSet);
         studentRepository.assignToCourses(assignMap);
         List<Course> actualAssignments = studentRepository.getStudentAssignments(students.get(0));
         assertEquals(courses, actualAssignments);
@@ -128,12 +126,12 @@ public class StudentRepoTest {
         actualAssignments = studentRepository.getStudentAssignments(students.get(1));
         assertEquals(courses, actualAssignments);
         actualAssignments = studentRepository.getStudentAssignments(students.get(0));
-        assertEquals(courses.subList(1,3), actualAssignments);
+        assertEquals(courses.subList(1, 3), actualAssignments);
     }
 
     @Test
     public void shouldDeleteStudent() throws DAOException {
-        List<Student> expected = students.subList(1,3);
+        List<Student> expected = students.subList(1, 3);
         studentRepository.insertStudent(students);
         studentRepository.deleteStudent(students.get(0));
         List<Student> actual = studentRepository.getAllStudents();
@@ -146,7 +144,7 @@ public class StudentRepoTest {
         courseRepository.insertCourses(courses);
         Map<Student, Set<Course>> assignMap = new HashMap<>();
         Set<Course> courseSet = new HashSet<>(courses);
-        assignMap.put(students.get(0),courseSet);
+        assignMap.put(students.get(0), courseSet);
         studentRepository.assignToCourses(assignMap);
 
         assertEquals(courses, studentRepository.getStudentAssignments(students.get(0)));
