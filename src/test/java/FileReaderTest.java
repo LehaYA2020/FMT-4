@@ -33,12 +33,6 @@ public class FileReaderTest {
     }
 
     @Test
-    public void getQuery_shouldReturnQuery() {
-        String actual = fileReader.getQuery("insertCourses.sql");
-        assertEquals(QUERY, actual);
-    }
-
-    @Test
     public void getAccess_shouldReturnAccessWithoutPassword() {
         assertEquals(ACCESS_WITHOUT_PASSWORD, fileReader.getAccess("TestDatabaseH2.properties"));
     }

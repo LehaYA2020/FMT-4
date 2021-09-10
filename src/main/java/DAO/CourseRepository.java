@@ -9,18 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository {
+    private final String GET_ALL_COURSES = "SELECT * FROM courses;";
+    private final String GET_COURSE_BY_ID = "SELECT courses.id, courses.name, courses.description FROM courses WHERE id = ?;";
+    private final String INSERT_COURSE = "INSERT INTO courses(name, description) VALUES(?, ?);";
+
     private final DBConnection dbConnection = DBConnection.getInstance();
-    private final FileReader fileReader = FileReader.getInstance();
-    private final QueriesConstants queriesConstants = new QueriesConstants();
 
     public CourseRepository() {
     }
 
     public List<Course> getAllCourses() throws DAOException {
-        String Query = queriesConstants.GET_ALL_COURSES;
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(Query);
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_COURSES);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             courses = processCoursesSet(resultSet);
         } catch (SQLException e) {
@@ -30,10 +31,9 @@ public class CourseRepository {
     }
 
     public Course getCourseById(int id) throws DAOException {
-        String Query = queriesConstants.GET_COURSE_BY_ID;
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(Query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_COURSE_BY_ID)) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 courses = processCoursesSet(resultSet);
@@ -45,9 +45,8 @@ public class CourseRepository {
     }
 
     public List<Course> insertCourses(List<Course> courses) throws DAOException {
-        String Query = queriesConstants.INSERT_COURSE;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(Query, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COURSE, Statement.RETURN_GENERATED_KEYS)) {
             for (Course c : courses) {
                 preparedStatement.setString(1, c.getName());
                 preparedStatement.setString(2, c.getDescription());

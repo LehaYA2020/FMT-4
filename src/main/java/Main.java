@@ -2,8 +2,12 @@ import dao.Exceptions.DAOException;
 import dao.ScriptExecutor;
 import dao.StudentRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) throws DAOException {
+        List<String> s = new ArrayList<>();
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         //scriptExecutor.executeScript("CreateTables.sql");
 

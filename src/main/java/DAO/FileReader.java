@@ -47,13 +47,6 @@ public class FileReader {
         } else return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), "");
     }
 
-    public String getQuery(String fileName) throws DAOException {
-        isNull(fileName);
-        file = getFileFromResources(fileName);
-        checkFile();
-        return getData().get(0);
-    }
-
     private File getFileFromResources(String fileName) {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(fileName);
