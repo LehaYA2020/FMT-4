@@ -1,7 +1,7 @@
 package dao;
 
-import dao.Exceptions.DAOException;
-import dao.Exceptions.MessagesConstants;
+import dao.exceptions.DAOException;
+import dao.exceptions.MessagesConstants;
 import models.Course;
 import models.Student;
 
@@ -12,21 +12,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class StudentRepository {
-    private final String GET_ALL_STUDENTS = "SELECT students.id, students.first_name, students.last_name, students_groups.group_id FROM students LEFT JOIN students_groups on students_groups.student_id = students.id;";
-    private final String GET_STUDENT_BY_ID = "SELECT students.id, students.first_name, students.last_name, students_groups.group_id FROM students LEFT JOIN students_groups on students_groups.student_id = students.id WHERE students.id = ?;";
-    private final String DELETE_STUDENT = "DELETE FROM students WHERE id = ?;";
-    private final String DELETE_STUDENT_FROM_COURSE = "delete FROM students_courses where student_id = ? AND course_id = ?;";
-    private final String ASSIGN_TO_COURSE = "INSERT INTO students_courses(student_id, course_id) VALUES(?, ?);";
-    private final String GET_STUDENT_ASSIGNMENTS = "SELECT course_id FROM students_courses WHERE student_id = ?;";
-    private final String GET_STUDENTS_BY_COURSE_NAME = "SELECT students.id, students.first_name, students.last_name, students_groups.group_id FROM students INNER JOIN students_courses ON students.id = students_courses.student_id LEFT JOIN students_groups ON students_groups.student_id = students.id INNER JOIN courses ON courses.id = students_courses.course_id WHERE courses.name = ?;";
-    private final String INSERT_STUDENT = "INSERT INTO students(first_name, last_name) VALUES(?, ?);";
-    private final String INSERT_STUDENT_TO_COURSE = "INSERT INTO students_groups(student_id, group_id) VALUES(?, ?);";
+
 
     private final DBConnection dbConnection = DBConnection.getInstance();
 
     public List<Student> insertStudent(List<Student> students) throws DAOException {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_STUDENT.getText(), Statement.RETURN_GENERATED_KEYS)) {
             for (Student s : students) {
                 preparedStatement.setString(1, s.getFirstName());
                 preparedStatement.setString(2, s.getLastName());
@@ -50,7 +42,8 @@ public class StudentRepository {
     public List<Student> getAllStudents() throws DAOException {
         List<Student> students;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_STUDENTS); ResultSet resultSet = preparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_ALL_STUDENTS.getText());
+             ResultSet resultSet = preparedStatement.executeQuery()) {
             students = processStudentsSet(resultSet);
         } catch (SQLException e) {
             throw new DAOException(MessagesConstants.CANNOT_GET_ALL_STUDENTS, e);
@@ -61,7 +54,7 @@ public class StudentRepository {
     public Student getStudentById(int id) throws DAOException {
         List<Student> students;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_STUDENT_BY_ID.getText())) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 students = processStudentsSet(resultSet);
@@ -74,7 +67,7 @@ public class StudentRepository {
 
     public void deleteStudent(Student student) throws DAOException {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_STUDENT)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.DELETE_STUDENT.getText())) {
             preparedStatement.setInt(1, student.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -84,7 +77,8 @@ public class StudentRepository {
 
     public List<Student> getStudentsByCourseName(String courseName) throws DAOException {
         List<Student> students;
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENTS_BY_COURSE_NAME)) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_STUDENTS_BY_COURSE_NAME.getText())) {
             preparedStatement.setString(1, courseName);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 students = processStudentsSet(resultSet);
@@ -97,7 +91,8 @@ public class StudentRepository {
 
     public boolean assignToCourse(Student student, Course course) throws DAOException {
         boolean flag = false;
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(ASSIGN_TO_COURSE)) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.ASSIGN_TO_COURSE.getText())) {
             List<Course> courses = this.getStudentAssignments(student);
             if (!courses.contains(course)) {
                 preparedStatement.setInt(1, student.getId());
@@ -113,7 +108,8 @@ public class StudentRepository {
 
     public List<Course> getStudentAssignments(Student student) throws DAOException {
         List<Course> courses;
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(GET_STUDENT_ASSIGNMENTS)) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_STUDENT_ASSIGNMENTS.getText())) {
             preparedStatement.setInt(1, student.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 courses = processAssignmentsSet(resultSet);
@@ -125,7 +121,8 @@ public class StudentRepository {
     }
 
     public Map<Student, Set<Course>> assignToCourses(Map<Student, Set<Course>> assignStudents) throws DAOException {
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(ASSIGN_TO_COURSE)) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.ASSIGN_TO_COURSE.getText())) {
             for (Map.Entry<Student, Set<Course>> entry : assignStudents.entrySet()) {
                 Student student = entry.getKey();
                 List<Course> courses = this.getStudentAssignments(student);
@@ -145,7 +142,8 @@ public class StudentRepository {
     }
 
     public void deleteStudentFromCourse(Student student, Course course) throws DAOException {
-        try (Connection connection = dbConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(DELETE_STUDENT_FROM_COURSE)) {
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.DELETE_STUDENT_FROM_COURSE.getText())) {
             preparedStatement.setInt(1, student.getId());
             preparedStatement.setInt(2, course.getId());
             preparedStatement.executeUpdate();
@@ -156,7 +154,7 @@ public class StudentRepository {
 
     private void insertStudentToGroup(List<Student> students) throws DAOException {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STUDENT_TO_COURSE)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_STUDENT_TO_COURSE.getText())) {
             for (Student student : students) {
                 if (student.getGroupId() > 0) {
                     preparedStatement.setInt(1, student.getId());

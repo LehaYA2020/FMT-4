@@ -55,9 +55,4 @@ public class Student {
         Student student = (Student) o;
         return id == student.id && groupId == student.groupId && Objects.equals(firstName, student.firstName) && Objects.equals(lastName, student.lastName);
     }
-
-    @Override
-    public int hashCode() {
-        return id;
-    }
 }

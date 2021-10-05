@@ -1,7 +1,7 @@
 package dao;
 
-import dao.Exceptions.DAOException;
-import dao.Exceptions.MessagesConstants;
+import dao.exceptions.DAOException;
+import dao.exceptions.MessagesConstants;
 import models.Course;
 
 import java.io.File;
@@ -42,9 +42,7 @@ public class FileReader {
             throw new DAOException(ioException.getMessage(), ioException);
         }
         List<String> data = getData();
-        if (data.size() == 3) {
-            return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
-        } else return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), "");
+        return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
     }
 
     private File getFileFromResources(String fileName) {

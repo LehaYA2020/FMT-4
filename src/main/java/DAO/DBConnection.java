@@ -1,6 +1,6 @@
 package dao;
 
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

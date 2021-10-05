@@ -1,5 +1,5 @@
 import dao.DBConnection;
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;

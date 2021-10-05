@@ -1,4 +1,4 @@
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 import dao.GroupRepository;
 import dao.ScriptExecutor;
 import dao.StudentRepository;

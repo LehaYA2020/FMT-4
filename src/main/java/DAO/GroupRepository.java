@@ -1,7 +1,7 @@
 package dao;
 
-import dao.Exceptions.DAOException;
-import dao.Exceptions.MessagesConstants;
+import dao.exceptions.DAOException;
+import dao.exceptions.MessagesConstants;
 import models.Group;
 
 import java.sql.*;
@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupRepository {
-    private final String GET_ALL_GROUPS = "SELECT * FROM groups;";
-    private final String GET_GROUPS_BY_COUNTER = "SELECT groups.id, groups.name, COUNT(*) FROM groups LEFT JOIN students_groups on students_groups.group_id = groups.id GROUP BY groups.id HAVING COUNT(*) <= ?;";
-    private final String INSERT_GROUP = "INSERT INTO groups(name) VALUES (?);";
+
 
     private final DBConnection dbConnection = DBConnection.getInstance();
 
@@ -19,7 +17,7 @@ public class GroupRepository {
     public List<Group> insertGroup(List<Group> groups) throws DAOException {
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement preparedStatement =
-                     connection.prepareStatement(INSERT_GROUP, Statement.RETURN_GENERATED_KEYS)) {
+                     connection.prepareStatement(Query.INSERT_GROUP.getText(), Statement.RETURN_GENERATED_KEYS)) {
             for (Group group : groups) {
                 preparedStatement.setString(1, group.getName());
                 preparedStatement.addBatch();
@@ -41,7 +39,7 @@ public class GroupRepository {
     public List<Group> getAllGroups() throws DAOException {
         List<Group> groups;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(GET_ALL_GROUPS);
+             PreparedStatement statement = connection.prepareStatement(Query.GET_ALL_GROUPS.getText());
              ResultSet resultSet = statement.executeQuery()) {
             groups = processGroupSet(resultSet);
         } catch (SQLException e) {
@@ -54,7 +52,7 @@ public class GroupRepository {
         List<Group> groups;
 
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_GROUPS_BY_COUNTER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_GROUPS_BY_COUNTER.getText())) {
             preparedStatement.setInt(1, counter);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 groups = processGroupSet(resultSet);

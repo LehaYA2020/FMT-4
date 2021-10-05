@@ -1,7 +1,7 @@
 package dao;
 
-import dao.Exceptions.DAOException;
-import dao.Exceptions.MessagesConstants;
+import dao.exceptions.DAOException;
+import dao.exceptions.MessagesConstants;
 import models.Course;
 
 import java.sql.*;
@@ -9,19 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository {
-    private final String GET_ALL_COURSES = "SELECT * FROM courses;";
-    private final String GET_COURSE_BY_ID = "SELECT courses.id, courses.name, courses.description FROM courses WHERE id = ?;";
-    private final String INSERT_COURSE = "INSERT INTO courses(name, description) VALUES(?, ?);";
 
     private final DBConnection dbConnection = DBConnection.getInstance();
-
-    public CourseRepository() {
-    }
 
     public List<Course> getAllCourses() throws DAOException {
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_COURSES);
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_ALL_COURSES.getText());
              ResultSet resultSet = preparedStatement.executeQuery()) {
             courses = processCoursesSet(resultSet);
         } catch (SQLException e) {
@@ -33,7 +27,7 @@ public class CourseRepository {
     public Course getCourseById(int id) throws DAOException {
         List<Course> courses;
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_COURSE_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.GET_COURSE_BY_ID.getText())) {
             preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 courses = processCoursesSet(resultSet);
@@ -46,7 +40,7 @@ public class CourseRepository {
 
     public List<Course> insertCourses(List<Course> courses) throws DAOException {
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COURSE, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(Query.INSERT_COURSE.getText(), Statement.RETURN_GENERATED_KEYS)) {
             for (Course c : courses) {
                 preparedStatement.setString(1, c.getName());
                 preparedStatement.setString(2, c.getDescription());

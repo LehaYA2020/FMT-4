@@ -1,5 +1,5 @@
 import dao.CourseRepository;
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 import dao.FileReader;
 import dao.GroupRepository;
 import models.Course;

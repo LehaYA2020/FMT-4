@@ -1,5 +1,5 @@
 import dao.CourseRepository;
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 import dao.ScriptExecutor;
 import models.Course;
 import org.junit.jupiter.api.BeforeEach;

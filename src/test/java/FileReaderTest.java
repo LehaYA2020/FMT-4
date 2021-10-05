@@ -1,5 +1,5 @@
 import dao.DBAccess;
-import dao.Exceptions.DAOException;
+import dao.exceptions.DAOException;
 import dao.FileReader;
 import models.Course;
 import org.junit.jupiter.api.BeforeAll;

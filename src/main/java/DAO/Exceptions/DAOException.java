@@ -1,4 +1,4 @@
-package dao.Exceptions;
+package dao.exceptions;
 
 public class DAOException extends RuntimeException {
     public DAOException() {
