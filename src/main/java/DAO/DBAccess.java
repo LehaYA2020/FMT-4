@@ -1,6 +1,8 @@
 package dao;
 
 
+import java.util.Objects;
+
 public class DBAccess {
     private final String url;
     private final String user;
@@ -22,15 +24,5 @@ public class DBAccess {
 
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DBAccess that)) return false;
-
-        if (!url.equals(that.url)) return false;
-        if (!user.equals(that.user)) return false;
-        return password.equals(that.password);
     }
 }

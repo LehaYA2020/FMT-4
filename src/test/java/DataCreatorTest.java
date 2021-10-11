@@ -39,7 +39,9 @@ public class DataCreatorTest {
 
         students = studentRepository.getAllStudents();
         assertEquals(dataContainer.getStudents().keySet().size(), students.size());
-        assertTrue(students.containsAll(dataContainer.getStudents().keySet()));
+        for (int i = 0; i<students.size()-1; i++) {
+            assertTrue(students.containsAll(dataContainer.getStudents().keySet()));
+        }
 
         courses = courseRepository.getAllCourses();
         assertEquals(dataContainer.getCourses().size(), courses.size());

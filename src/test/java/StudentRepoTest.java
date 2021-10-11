@@ -20,7 +20,7 @@ public class StudentRepoTest {
 
     @BeforeAll
     public static void prepare() throws DAOException {
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 10; i <= 13; i++) {
             students.add(new Student(i, "Student-" + i, "forTest"));
             courses.add(new Course("Course-" + i, "forTest"));
         }
@@ -41,21 +41,40 @@ public class StudentRepoTest {
         studentRepository.insertStudent(students);
 
         studentsInDB = studentRepository.getAllStudents();
-        assertEquals(students, studentsInDB);
+
+        assertEquals(students.size(), studentsInDB.size());
+
+        for (int i = 0; i <= studentsInDB.size() - 1; i++) {
+            Student studentInDB = studentsInDB.get(i);
+            assertEquals(students.get(i).getId(), studentInDB.getId());
+            assertEquals(students.get(i).getFirstName(), studentInDB.getFirstName());
+            assertEquals(students.get(i).getLastName(), studentInDB.getLastName());
+            assertEquals(students.get(i).getGroupId(), studentInDB.getGroupId());
+        }
     }
 
     @Test
     public void shouldGetAllStudentsFromDB() throws DAOException {
         studentRepository.insertStudent(students);
         List<Student> studentsInDB = studentRepository.getAllStudents();
-        assertEquals(students, studentsInDB);
+        assertEquals(students.size(), studentsInDB.size());
+        for (int i = 0; i <= studentsInDB.size() - 1; i++) {
+            Student studentInDB = studentsInDB.get(i);
+            assertEquals(students.get(i).getId(), studentInDB.getId());
+            assertEquals(students.get(i).getFirstName(), studentInDB.getFirstName());
+            assertEquals(students.get(i).getLastName(), studentInDB.getLastName());
+            assertEquals(students.get(i).getGroupId(), studentInDB.getGroupId());
+        }
     }
 
     @Test
     public void shouldGetStudentById() throws DAOException {
         studentRepository.insertStudent(students);
         Student studentInDB = studentRepository.getStudentById(1);
-        assertEquals(students.get(0), studentInDB);
+        assertEquals(students.get(0).getId(), studentInDB.getId());
+        assertEquals(students.get(0).getFirstName(), studentInDB.getFirstName());
+        assertEquals(students.get(0).getLastName(), studentInDB.getLastName());
+        assertEquals(students.get(0).getGroupId(), studentInDB.getGroupId());
     }
 
     @Test
@@ -104,7 +123,13 @@ public class StudentRepoTest {
         List<Student> actualStudents = studentRepository.getStudentsByCourseName(courses.get(1).getName());
         List<Student> expectedStudents = students.subList(0, 1);
 
-        assertEquals(expectedStudents, actualStudents);
+        for (int i = 0; i <= expectedStudents.size() - 1; i++) {
+            Student studentInDB = actualStudents.get(i);
+            assertEquals(expectedStudents.get(i).getId(), studentInDB.getId());
+            assertEquals(expectedStudents.get(i).getFirstName(), studentInDB.getFirstName());
+            assertEquals(expectedStudents.get(i).getLastName(), studentInDB.getLastName());
+            assertEquals(expectedStudents.get(i).getGroupId(), studentInDB.getGroupId());
+        }
     }
 
     @Test
@@ -121,21 +146,27 @@ public class StudentRepoTest {
         actualAssignments = studentRepository.getStudentAssignments(students.get(1));
         assertEquals(courses, actualAssignments);
 
-        studentRepository.deleteStudentFromCourse(students.get(0), courses.get(0));
+        studentRepository.deleteStudentFromCourse(students.get(1), courses.get(0));
 
         actualAssignments = studentRepository.getStudentAssignments(students.get(1));
-        assertEquals(courses, actualAssignments);
+        assertEquals(courses.subList(1, 4), actualAssignments);
         actualAssignments = studentRepository.getStudentAssignments(students.get(0));
-        assertEquals(courses.subList(1, 3), actualAssignments);
+        assertEquals(courses, actualAssignments);
     }
 
     @Test
     public void shouldDeleteStudent() throws DAOException {
-        List<Student> expected = students.subList(1, 3);
+        List<Student> expectedStudents = students.subList(1, 3);
         studentRepository.insertStudent(students);
         studentRepository.deleteStudent(students.get(0));
-        List<Student> actual = studentRepository.getAllStudents();
-        assertEquals(expected, actual);
+        List<Student> actualStudents = studentRepository.getAllStudents();
+        for (int i = 0; i <= expectedStudents.size() - 1; i++) {
+            Student studentInDB = actualStudents.get(i);
+            assertEquals(expectedStudents.get(i).getId(), studentInDB.getId());
+            assertEquals(expectedStudents.get(i).getFirstName(), studentInDB.getFirstName());
+            assertEquals(expectedStudents.get(i).getLastName(), studentInDB.getLastName());
+            assertEquals(expectedStudents.get(i).getGroupId(), studentInDB.getGroupId());
+        }
     }
 
     @Test
@@ -149,5 +180,6 @@ public class StudentRepoTest {
 
         assertEquals(courses, studentRepository.getStudentAssignments(students.get(0)));
     }
+
 
 }

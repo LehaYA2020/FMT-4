@@ -9,10 +9,10 @@ public class Main {
     public static void main(String[] args) throws DAOException {
         List<String> s = new ArrayList<>();
         ScriptExecutor scriptExecutor = new ScriptExecutor();
-        //scriptExecutor.executeScript("CreateTables.sql");
+        scriptExecutor.executeScript("CreateTables.sql");
 
-        //DataCreator dataCreator = new DataCreator();
-        //dataCreator.createTestData();
+        DataCreator dataCreator = new DataCreator();
+        dataCreator.createTestData();
 
         StudentRepository studentRepository = new StudentRepository();
         System.out.println(studentRepository.getStudentById(1).toString());
