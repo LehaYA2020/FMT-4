@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws DAOException {
-        List<String> s = new ArrayList<>();
         ScriptExecutor scriptExecutor = new ScriptExecutor();
         scriptExecutor.executeScript("CreateTables.sql");
 
@@ -16,6 +15,5 @@ public class Main {
 
         StudentRepository studentRepository = new StudentRepository();
         System.out.println(studentRepository.getStudentById(1).toString());
-
     }
 }
