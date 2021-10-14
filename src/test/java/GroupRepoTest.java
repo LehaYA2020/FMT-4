@@ -67,11 +67,13 @@ public class GroupRepoTest {
 
     private static void insertStudentsToGroups() {
         for (int i = 0; i < 9; i++) {
-            if (i<2)
-            testStudentList.get(i).setGroupId(testGroupsList.get(0).getId());
-            else if (i<5 && i>2)
+            if (i < 2) {
+                testStudentList.get(i).setGroupId(testGroupsList.get(0).getId());
+            } else if (i < 5 && i > 2) {
                 testStudentList.get(i).setGroupId(testGroupsList.get(1).getId());
-            else testStudentList.get(i).setGroupId(testGroupsList.get(2).getId());
+            } else {
+                testStudentList.get(i).setGroupId(testGroupsList.get(2).getId());
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-import dao.DBConnection;
+import dao.DbConnection;
 import dao.exceptions.DAOException;
 import dao.ScriptExecutor;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,12 +11,12 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ScriptExecutorTest {
-    private static DBConnection dbConnection;
+    private static DbConnection dbConnection;
     private final ScriptExecutor scriptExecutor = new ScriptExecutor();
 
     @BeforeAll
     public static void prepare() throws DAOException {
-        dbConnection = DBConnection.getInstance("TestDatabaseH2.properties");
+        dbConnection = new DbConnection("TestDatabaseH2.properties");
     }
 
     @Test

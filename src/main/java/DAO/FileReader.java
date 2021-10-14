@@ -31,7 +31,7 @@ public class FileReader {
         return instance;
     }
 
-    public DBAccess getAccess(String fileName) throws DAOException {
+    public DbAccess getAccess(String fileName) throws DAOException {
         Properties properties = new Properties();
         isNull(fileName);
         file = getFileFromResources(fileName);
@@ -42,7 +42,7 @@ public class FileReader {
             throw new DAOException(ioException.getMessage(), ioException);
         }
         List<String> data = getData();
-        return new DBAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
+        return new DbAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
     }
 
     private File getFileFromResources(String fileName) {

@@ -1,1 +1,0 @@
-SELECT groups.id, groups.name, COUNT(*) FROM groups LEFT JOIN students_groups on students_groups.group_id = groups.id GROUP BY groups.id HAVING COUNT(*) <= ?;

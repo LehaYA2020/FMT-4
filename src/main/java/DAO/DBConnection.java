@@ -6,24 +6,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBConnection {
-    private static DBConnection instance;
-    private static DBAccess access;
+public class DbConnection {
+    private static DbConnection instance;
+    private static DbAccess access;
 
-    public static synchronized DBConnection getInstance() throws DAOException {
+    public DbConnection() {
+        getInstance();
+    }
+
+    public DbConnection(String properties) {
+        getInstance(properties);
+    }
+
+    private static synchronized DbConnection getInstance() throws DAOException {
         if (instance == null) {
             FileReader fileReader = FileReader.getInstance();
             access = fileReader.getAccess("database.properties");
-            instance = new DBConnection();
+            instance = new DbConnection();
         }
         return instance;
     }
 
-    public static synchronized DBConnection getInstance(String properties) throws DAOException {
+    private static synchronized DbConnection getInstance(String properties) throws DAOException {
         if (instance == null) {
             FileReader fileReader = FileReader.getInstance();
             access = fileReader.getAccess(properties);
-            instance = new DBConnection();
+            instance = new DbConnection();
         }
         return instance;
     }

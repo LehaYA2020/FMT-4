@@ -55,10 +55,10 @@ public class Student {
 
         Student student = (Student) o;
 
-        if (id != student.id) return false;
-        if (groupId != student.groupId) return false;
-        if (firstName != null ? !firstName.equals(student.firstName) : student.firstName != null) return false;
-        return lastName != null ? lastName.equals(student.lastName) : student.lastName == null;
+        if (this.id != student.getId()) return false;
+        if (this.groupId != student.getGroupId()) return false;
+        if (!Objects.equals(this.firstName, student.getFirstName())) return false;
+        return Objects.equals(this.lastName, student.getLastName());
     }
 
     @Override

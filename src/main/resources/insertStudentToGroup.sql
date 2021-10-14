@@ -1,1 +1,0 @@
-INSERT INTO students_groups(student_id, group_id) VALUES(?, ?);

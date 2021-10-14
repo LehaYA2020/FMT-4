@@ -1,4 +1,4 @@
-import dao.DBAccess;
+import dao.DbAccess;
 import dao.exceptions.DAOException;
 import dao.FileReader;
 import models.Course;
@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileReaderTest {
     private final FileReader fileReader = FileReader.getInstance();
-    private final DBAccess ACCESS_WITHOUT_PASSWORD = new DBAccess("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+    private final DbAccess ACCESS_WITHOUT_PASSWORD = new DbAccess("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
             "sa", "");
-    private final DBAccess ACCESS_WITH_PASSWORD = new DBAccess("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
+    private final DbAccess ACCESS_WITH_PASSWORD = new DbAccess("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
             "sa", "228"
     );
     private final String QUERY = "INSERT INTO courses(name, description) VALUES(?, ?);";

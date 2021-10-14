@@ -3,12 +3,12 @@ package dao;
 
 import java.util.Objects;
 
-public class DBAccess {
+public class DbAccess {
     private final String url;
     private final String user;
     private final String password;
 
-    public DBAccess(String url, String user, String password) {
+    public DbAccess(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;

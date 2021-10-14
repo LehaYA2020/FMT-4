@@ -32,7 +32,7 @@ public class Group {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Group group = (Group) o;
-        return id == group.id && Objects.equals(name, group.name);
+        return this.id == group.id && Objects.equals(this.name, group.name);
     }
 
     @Override

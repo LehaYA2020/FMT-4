@@ -1,1 +1,0 @@
-INSERT INTO courses(name, description) VALUES(?, ?);
