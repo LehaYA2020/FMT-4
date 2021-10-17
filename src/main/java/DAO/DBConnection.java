@@ -14,7 +14,7 @@ public class DbConnection {
         this.access = access;
     }
 
-    public static synchronized DbConnection getInstance() throws DAOException {
+    public static DbConnection getInstance() throws DAOException {
         DbConnection result = instance;
         if (result != null) {
             return result;
@@ -29,7 +29,7 @@ public class DbConnection {
         }
     }
 
-    public static synchronized DbConnection getInstance(String properties) throws DAOException {
+    public static DbConnection getInstance(String properties) throws DAOException {
         DbConnection result = instance;
         if (result != null) {
             return result;
