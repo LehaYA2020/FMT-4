@@ -11,7 +11,7 @@ import java.util.List;
 public class GroupRepository {
 
 
-    private final DbConnection dbConnection = new DbConnection();
+    private final DbConnection dbConnection = DbConnection.getInstance();
 
 
     public List<Group> insertGroup(List<Group> groups) throws DAOException {

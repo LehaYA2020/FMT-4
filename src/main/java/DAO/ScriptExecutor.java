@@ -14,7 +14,7 @@ public class ScriptExecutor {
     }
 
     private void execute(String[] scripts) throws DAOException {
-        DbConnection dbConnection = new DbConnection();
+        DbConnection dbConnection = DbConnection.getInstance();
         try (Connection connection = dbConnection.getConnection();
              Statement statement = connection.createStatement()) {
             for (String line : scripts) {

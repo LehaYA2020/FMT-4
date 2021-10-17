@@ -16,7 +16,7 @@ public class ScriptExecutorTest {
 
     @BeforeAll
     public static void prepare() throws DAOException {
-        dbConnection = new DbConnection("TestDatabaseH2.properties");
+        dbConnection = DbConnection.getInstance("TestDatabaseH2.properties");
     }
 
     @Test

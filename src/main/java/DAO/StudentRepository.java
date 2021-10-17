@@ -14,7 +14,7 @@ import java.util.Set;
 public class StudentRepository {
 
 
-    private final DbConnection dbConnection = new DbConnection();
+    private final DbConnection dbConnection = DbConnection.getInstance();
 
     public List<Student> insertStudent(List<Student> students) throws DAOException {
         try (Connection connection = dbConnection.getConnection();

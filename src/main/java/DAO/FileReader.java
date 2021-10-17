@@ -41,7 +41,6 @@ public class FileReader {
         } catch (IOException ioException) {
             throw new DAOException(ioException.getMessage(), ioException);
         }
-        List<String> data = getData();
         return new DbAccess(properties.getProperty("url"), properties.getProperty("user"), properties.getProperty("password"));
     }
 

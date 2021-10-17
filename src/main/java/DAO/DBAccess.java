@@ -1,8 +1,5 @@
 package dao;
 
-
-import java.util.Objects;
-
 public class DbAccess {
     private final String url;
     private final String user;

@@ -7,33 +7,41 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbConnection {
-    private static DbConnection instance;
+    private static volatile DbConnection instance;
     private static DbAccess access;
 
-    public DbConnection() {
-        getInstance();
+    private DbConnection(DbAccess access) {
+        this.access = access;
     }
 
-    public DbConnection(String properties) {
-        getInstance(properties);
-    }
-
-    private static synchronized DbConnection getInstance() throws DAOException {
-        if (instance == null) {
-            FileReader fileReader = FileReader.getInstance();
-            access = fileReader.getAccess("database.properties");
-            instance = new DbConnection();
+    public static synchronized DbConnection getInstance() throws DAOException {
+        DbConnection result = instance;
+        if (result != null) {
+            return result;
         }
-        return instance;
+        synchronized(DbConnection.class) {
+            if (instance == null) {
+                FileReader dataReader = FileReader.getInstance();
+                DbAccess access = dataReader.getAccess("Database.properties");
+                instance = new DbConnection(access);
+            }
+            return instance;
+        }
     }
 
-    private static synchronized DbConnection getInstance(String properties) throws DAOException {
-        if (instance == null) {
-            FileReader fileReader = FileReader.getInstance();
-            access = fileReader.getAccess(properties);
-            instance = new DbConnection();
+    public static synchronized DbConnection getInstance(String properties) throws DAOException {
+        DbConnection result = instance;
+        if (result != null) {
+            return result;
         }
-        return instance;
+        synchronized(DbConnection.class) {
+            if (instance == null) {
+                FileReader dataReader = FileReader.getInstance();
+                DbAccess access = dataReader.getAccess(properties);
+                instance = new DbConnection(access);
+            }
+            return instance;
+        }
     }
 
     public Connection getConnection() throws SQLException {

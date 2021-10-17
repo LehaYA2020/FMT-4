@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CourseRepository {
 
-    private final DbConnection dbConnection = new DbConnection();
+    private final DbConnection dbConnection = DbConnection.getInstance();
 
     public List<Course> getAllCourses() throws DAOException {
         List<Course> courses;

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DbConnectionTest {
     @Test
     void getConnection() throws DAOException, SQLException {
-        DbConnection dbConnection = new DbConnection();
+        DbConnection dbConnection = DbConnection.getInstance();
         try (Connection connection = dbConnection.getConnection()) {
             assertTrue(connection.isValid(1));
             assertFalse(connection.isClosed());
@@ -20,7 +20,7 @@ public class DbConnectionTest {
 
     @Test
     void getTestConnection() throws DAOException, SQLException {
-        DbConnection daoFactory = new DbConnection("database.properties");
+        DbConnection daoFactory = DbConnection.getInstance("database.properties");
         try (Connection connection = daoFactory.getConnection()) {
             assertTrue(connection.isValid(1));
             assertFalse(connection.isClosed());
